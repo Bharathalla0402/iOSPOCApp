@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @State private var showSplashScreen = true
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        if showSplashScreen {
+            SplashView()
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                        withAnimation(.easeInOut(duration: 0.4)) {
+                            showSplashScreen = false
+                        }
+                    }
+                }
+        } else {
+            PostListView()
         }
-        .padding()
     }
 }
 
