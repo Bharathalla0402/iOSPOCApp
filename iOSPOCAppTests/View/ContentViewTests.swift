@@ -19,7 +19,7 @@ final class ContentViewTests: XCTestCase {
 
     // Covers SplashView branch
     func testContentView_showsSplashInitially() {
-        let view = ContentView()
+        let view = ContentView(isJailbroken: false)
 
         _ = host(view)
 
@@ -28,7 +28,7 @@ final class ContentViewTests: XCTestCase {
 
     // Trigger onAppear (covers first closure)
     func testContentView_onAppear_executesClosure() {
-        let view = ContentView()
+        let view = ContentView(isJailbroken: false)
 
         let hostedView = host(view)
 
@@ -42,7 +42,7 @@ final class ContentViewTests: XCTestCase {
     func testContentView_asyncAfter_executes() {
         let expectation = XCTestExpectation(description: "Wait for async")
 
-        let view = ContentView()
+        let view = ContentView(isJailbroken: false)
         _ = host(view)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -58,7 +58,7 @@ final class ContentViewTests: XCTestCase {
     func testContentView_animationBlock_executes() {
         let expectation = XCTestExpectation(description: "Animation path")
 
-        let view = ContentView()
+        let view = ContentView(isJailbroken: false)
         _ = host(view)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -72,7 +72,7 @@ final class ContentViewTests: XCTestCase {
 
     // Cover ELSE branch (PostListView)
     func testContentView_switchesToPostListView() {
-        var view = ContentView()
+        var view = ContentView(isJailbroken: false)
 
         // Force state manually using Mirror
         let mirror = Mirror(reflecting: view)
@@ -82,7 +82,7 @@ final class ContentViewTests: XCTestCase {
 
         // Re-create view AFTER delay (simulate state change)
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            view = ContentView()
+            view = ContentView(isJailbroken: false)
         }
 
         _ = host(view)

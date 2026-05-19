@@ -12,7 +12,8 @@ class PostListViewModel: ObservableObject {
     // MARK: - Published Objects
     @Published var posts: [Post] = []
     @Published var isLoading = false
-    @Published var error: String?
+    @Published var error: String? = nil
+    @Published var showAlert: Bool = false
 
     // MARK: - iVars
     private let service: APIServiceProtocol
@@ -28,20 +29,14 @@ class PostListViewModel: ObservableObject {
 
     @MainActor
     func fetchPosts() async {
-        guard networkMonitor.isConnected else {
-            error = "No internet connection"
-            return
-        }
-
         isLoading = true
         error = nil
-
         do {
             posts = try await service.fetchPosts()
         } catch {
-            self.error = "Failed to load data"
+            self.error = AppConstants.failedData
+            self.showAlert = true
         }
-
         isLoading = false
     }
 }

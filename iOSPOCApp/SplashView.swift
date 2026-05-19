@@ -20,11 +20,11 @@ struct SplashView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 16) {
-                Image(systemName: "doc.text.image.fill")
+                Image(systemName: Constants.ImageStrings.docFile)
                     .font(.system(size: 85))
                     .foregroundColor(.blue)
 
-                Text("ArticleHub")
+                Text(AppConstants.articleHub)
                     .font(.largeTitle)
                     .bold()
                     .tracking(1.5)

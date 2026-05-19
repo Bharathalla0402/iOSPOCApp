@@ -9,6 +9,9 @@ import SwiftUI
 
 struct PostListView: View {
 
+    // MARK: - Environment Objects
+    @Environment(NetworkMonitor.self) private var networkMonitor
+    
     // MARK: - StateObject
     @StateObject private var viewModel: PostListViewModel
 
@@ -20,37 +23,61 @@ struct PostListView: View {
         NavigationStack {
             Group {
                 if viewModel.isLoading {
-                    ProgressView("Loading posts...")
+                    ProgressView(AppConstants.loadingText)
                 } else if let error = viewModel.error {
-                    VStack(spacing: 12) {
-                        Text(error)
-                            .foregroundColor(.red)
-                        Button("Retry") {
-                            Task { await viewModel.fetchPosts() }
-                        }
-                    }
+                    retryView(error: error)
                 } else {
                     List(viewModel.posts) { post in
                         postRowView(post: post)
-                               .background(
-                                   NavigationLink(value: post) {
-                                       EmptyView()
-                                   }
-                                   .opacity(0.0)
-                               )
-                               .listRowSeparator(.hidden) // Removes default separator line interference
-                               .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .background(
+                                NavigationLink(value: post) {
+                                    EmptyView()
+                                }
+                                    .opacity(0.0)
+                            )
+                            .listRowSeparator(.hidden) // Removes default separator line interference
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                     }
                     .listStyle(.plain)
                 }
             }
             .background(Color.mainBackgroundColor.ignoresSafeArea())
-            .navigationTitle("Articles")
+            .navigationTitle(AppConstants.articles)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color.brown, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .navigationDestination(for: Post.self) { post in
                 PostDetailView(post: post)
+            }
+            .onChange(of: networkMonitor.isConnected ) { _, isConnected in
+                if isConnected {
+                    Task {
+                        await viewModel.fetchPosts()
+                    }
+                }
+            }
+            .alert(
+                AppConstants.errorTitle,
+                isPresented: $viewModel.showAlert
+            ) {
+                Button(AppConstants.retry) {
+                    viewModel.showAlert = false
+                    Task {
+                        await viewModel.fetchPosts()
+                    }
+                }
+
+                Button(AppConstants.okButton, role: .cancel) {
+                    viewModel.showAlert = false
+                }
+            } message: {
+                Text(viewModel.error ?? "")
+            }
+            .onAppear {
+                if !networkMonitor.isConnected {
+                    viewModel.error = AppConstants.noConnection
+                    viewModel.showAlert = true
+                }
             }
             .task {
                 if viewModel.posts.isEmpty {
@@ -64,10 +91,30 @@ struct PostListView: View {
 extension PostListView {
 
     @ViewBuilder
+    func retryView(error: String) -> some View {
+        VStack(spacing: 20) {
+            Image(systemName: Constants.ImageStrings.wifiSalsh)
+                .font(.largeTitle)
+                .foregroundColor(.gray)
+
+            Text(error)
+                .font(.headline)
+                .multilineTextAlignment(.center)
+
+            Button(AppConstants.retry) {
+                Task {
+                    await viewModel.fetchPosts()
+                }
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
+    }
+
+    @ViewBuilder
     func postRowView(post: Post) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 6) {
-
                 HStack {
                     Text(post.status.uppercased())
                         .font(.caption2)
@@ -105,7 +152,7 @@ extension PostListView {
 
             Spacer()
 
-            Image(systemName: "chevron.right")
+            Image(systemName: Constants.ImageStrings.rightImage)
                 .font(.footnote)
                 .foregroundColor(.secondary)
         }

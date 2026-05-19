@@ -19,8 +19,7 @@ final class PostListViewModelTests: XCTestCase {
         mockService = MockAPIService()
         mockNetwork = MockNetworkMonitor()
         viewModel = PostListViewModel(
-            service: mockService,
-            networkMonitor: mockNetwork
+            service: mockService
         )
     }
 
@@ -70,21 +69,6 @@ extension PostListViewModelTests {
         XCTAssertFalse(viewModel.isLoading)
         XCTAssertEqual(viewModel.error, "Failed to load data")
         XCTAssertTrue(viewModel.posts.isEmpty)
-    }
-
-    // No Internet Case
-    @MainActor
-    func test_fetchPosts_noInternet() async {
-        // Arrange
-        mockNetwork.setConnection(false)
-
-        // Act
-        await viewModel.fetchPosts()
-
-        // Assert
-        XCTAssertEqual(viewModel.error, "No internet connection")
-        XCTAssertTrue(viewModel.posts.isEmpty)
-        XCTAssertFalse(viewModel.isLoading)
     }
 
     // Internet Case

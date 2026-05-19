@@ -40,7 +40,7 @@ final class IOSPOCAppTests: XCTestCase {
     }
 
     func testContentViewLoads() {
-        let view = ContentView()
+        let view = ContentView(isJailbroken: false)
         XCTAssertNotNil(view)
     }
 
@@ -60,7 +60,7 @@ final class IOSPOCAppTests: XCTestCase {
     }
 
     func testSplashFlow() {
-        let view = ContentView()
+        let view = ContentView(isJailbroken: false)
         XCTAssertNotNil(view)
     }
 
@@ -124,7 +124,7 @@ final class IOSPOCAppTests: XCTestCase {
     func testInit_whenUITesting_returnsEarly() {
         let app = IOSPOCAppApp(
             arguments: ["UI_TESTING"],
-            jailbrokenCheck: { false }
+            jailbreakCheck: { false }
         )
         XCTAssertNotNil(app)
     }
@@ -132,7 +132,7 @@ final class IOSPOCAppTests: XCTestCase {
     func testInit_whenNotUITest_andNotJailbroken() {
         let app = IOSPOCAppApp(
             arguments: [],
-            jailbrokenCheck: { false }
+            jailbreakCheck: { false }
         )
         XCTAssertNotNil(app)
     }
@@ -140,7 +140,7 @@ final class IOSPOCAppTests: XCTestCase {
     func testInit_whenJailbroken_doesNotExitInUnitTest() {
         let app = IOSPOCAppApp(
             arguments: ["UNIT_TESTING"],
-            jailbrokenCheck: { true }
+            jailbreakCheck: { true }
         )
         XCTAssertNotNil(app)
     }

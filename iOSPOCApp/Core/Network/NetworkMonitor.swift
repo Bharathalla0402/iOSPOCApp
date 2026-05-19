@@ -9,18 +9,21 @@ import Network
 import SwiftUI
 import Combine
 
-class NetworkMonitor: ObservableObject {
-    private let monitor = NWPathMonitor()
-    private let queue = DispatchQueue.global()
 
-    @Published var isConnected = true
+protocol NetworkMonitorProtocol {
+    var isConnected: Bool { get set }
+}
 
+@Observable
+final class NetworkMonitor: NetworkMonitorProtocol {
+    private let networkMonitor = NWPathMonitor()
+    private let workerQueue = DispatchQueue(label: AppConstants.networkMonitor)
+    var isConnected = false
+    
     init() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                self.isConnected = path.status == .satisfied
-            }
+        networkMonitor.pathUpdateHandler = { path in
+            self.isConnected = path.status == .satisfied
         }
-        monitor.start(queue: queue)
+        networkMonitor.start(queue: workerQueue)
     }
 }

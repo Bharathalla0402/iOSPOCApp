@@ -63,7 +63,7 @@ private extension PostDetailView {
                         dismiss()
                     },
                     label: {
-                        Image(systemName: "chevron.left")
+                        Image(systemName: Constants.ImageStrings.leftImage)
                             .foregroundColor(.black)
                             .padding(10)
                             .background(Color.white.opacity(0.6))
@@ -73,13 +73,13 @@ private extension PostDetailView {
 
                 Spacer()
 
-                Text("Details")
+                Text(AppConstants.details)
                     .font(.headline)
                     .fontWeight(.semibold)
 
                 Spacer()
 
-                Image(systemName: "bookmark")
+                Image(systemName: Constants.ImageStrings.bookmark)
                     .font(.headline)
             }
             .padding(.horizontal)
@@ -94,14 +94,14 @@ private extension PostDetailView {
         HStack(spacing: 10) {
             Text(viewModel.date)
 
-            Text("•")
+            Text(AppConstants.dot)
 
             HStack(spacing: 4) {
-                Image(systemName: "eye.fill")
+                Image(systemName: Constants.ImageStrings.fillEye)
                 Text("\(viewModel.postViews)")
             }
 
-            Text("• 5 min read")
+            Text(AppConstants.read)
 
             Spacer()
         }
@@ -155,23 +155,23 @@ private extension PostDetailView {
     var reactionFooter: some View {
         HStack {
             reactionItem(
-                icon: "hand.thumbsup.fill",
+                icon: Constants.ImageStrings.handUpFill,
                 value: viewModel.likesText,
                 color: .green
             )
 
             reactionItem(
-                icon: "hand.thumbsdown.fill",
+                icon: Constants.ImageStrings.handDownFill,
                 value: viewModel.dislikesText,
                 color: .red
             )
 
             Spacer()
 
-            Image(systemName: "square.and.arrow.up")
+            Image(systemName: Constants.ImageStrings.squareArrowUp)
                 .font(.title3)
 
-            Image(systemName: "bookmark")
+            Image(systemName: Constants.ImageStrings.bookmark)
                 .font(.title3)
         }
         .font(.headline)

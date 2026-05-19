@@ -30,10 +30,10 @@ struct Post: Identifiable, Hashable, Decodable {
     }
 
     var status: String {
-        return reactions.likes > 100 ? "Trending" : "Featured"
+        return reactions.likes > 100 ? AppConstants.trending : AppConstants.featured
     }
 
     var dateString: String {
-        return "May 15, 2026"
+        return AppConstants.testDate
     }
 }

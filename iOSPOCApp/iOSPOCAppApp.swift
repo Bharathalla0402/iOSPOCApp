@@ -10,36 +10,37 @@ import SwiftUI
 @main
 struct IOSPOCAppApp: App {
 
-    // Required by SwiftUI
+    // MARK: - state objects
+    @State private var networkMonitor = NetworkMonitor()
+    
+    // MARK: - i vars
+    private let isJailbroken: Bool
+
     init() {
         self.init(
             arguments: ProcessInfo.processInfo.arguments,
-            jailbrokenCheck: { JailbreakDetector.isJailbroken() }
+            jailbreakCheck: { JailbreakDetector.isJailbroken() }
         )
     }
 
-    // Your testable initializer
     init(
         arguments: [String],
-        jailbrokenCheck: () -> Bool
+        jailbreakCheck: () -> Bool
     ) {
-        let isUITest = arguments.contains("UI_TESTING")
+        let isUITest = arguments.contains(AppConstants.uiTesting)
 
         if isUITest {
+            self.isJailbroken = false
             return
         }
 
-        if jailbrokenCheck() {
-            // avoid exit in unit test
-            if !arguments.contains("UNIT_TESTING") {
-                exit(0)
-            }
-        }
+        self.isJailbroken = jailbreakCheck()
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(isJailbroken: isJailbroken)
+                .environment(networkMonitor)
         }
     }
 }

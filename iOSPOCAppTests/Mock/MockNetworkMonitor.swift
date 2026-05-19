@@ -7,11 +7,9 @@
 
 @testable import iOSPOCApp
 
-final class MockNetworkMonitor: NetworkMonitor {
+final class MockNetworkMonitor: NetworkMonitorProtocol {
 
-    override init() {
-        super.init()
-    }
+    var isConnected: Bool = false
 
     func setConnection(_ status: Bool) {
         isConnected = status
