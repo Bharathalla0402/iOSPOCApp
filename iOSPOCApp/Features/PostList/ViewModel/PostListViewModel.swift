@@ -12,7 +12,7 @@ class PostListViewModel: ObservableObject {
     // MARK: - Published Objects
     @Published var posts: [Post] = []
     @Published var isLoading = false
-    @Published var error: String? = nil
+    @Published var error: String?
     @Published var showAlert: Bool = false
 
     // MARK: - iVars

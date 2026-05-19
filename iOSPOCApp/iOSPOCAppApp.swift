@@ -12,7 +12,7 @@ struct IOSPOCAppApp: App {
 
     // MARK: - state objects
     @State private var networkMonitor = NetworkMonitor()
-    
+
     // MARK: - i vars
     private let isJailbroken: Bool
 

@@ -11,7 +11,7 @@ struct PostListView: View {
 
     // MARK: - Environment Objects
     @Environment(NetworkMonitor.self) private var networkMonitor
-    
+
     // MARK: - StateObject
     @StateObject private var viewModel: PostListViewModel
 
