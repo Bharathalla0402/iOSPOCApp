@@ -81,6 +81,7 @@ private extension PostDetailView {
 
                 Image(systemName: Constants.ImageStrings.bookmark)
                     .font(.headline)
+                    .hidden()
             }
             .padding(.horizontal)
             .padding(.top, 5)
@@ -170,9 +171,11 @@ private extension PostDetailView {
 
             Image(systemName: Constants.ImageStrings.squareArrowUp)
                 .font(.title3)
+                .hidden()
 
             Image(systemName: Constants.ImageStrings.bookmark)
                 .font(.title3)
+                .hidden()
         }
         .font(.headline)
     }
