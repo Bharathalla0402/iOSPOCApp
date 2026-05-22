@@ -13,12 +13,21 @@ final class APIServiceTests: XCTestCase {
     var service: APIService!
 
     override func setUp() {
+        MockURLProtocol.isEnabled = true
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
         let session = URLSession(configuration: config)
-
         service = APIService(session: session)
     }
+
+    override func tearDown() {
+        MockURLProtocol.isEnabled = false
+        MockURLProtocol.mockData = nil
+        MockURLProtocol.response = nil
+        MockURLProtocol.error = nil
+        super.tearDown()
+    }
+
 }
 
 extension APIServiceTests {

@@ -26,26 +26,46 @@ class MockURLProtocol: URLProtocol {
     static var mockData: Data?
     static var response: URLResponse?
     static var error: Error?
+    static var isEnabled = false
+
+    private static let handledKey = "MockURLProtocolHandled"
 
     override class func canInit(with request: URLRequest) -> Bool {
-        return true
+        if URLProtocol.property(
+            forKey: handledKey,
+            in: request
+        ) != nil {
+            return false
+        }
+
+        return isEnabled
     }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        request
+        return request
     }
 
     override func startLoading() {
-        if let error = MockURLProtocol.error {
+        let newRequest = ((request as NSURLRequest).mutableCopy() as? NSMutableURLRequest)
+        URLProtocol.setProperty(
+            true,
+            forKey: Self.handledKey,
+            in: newRequest!
+        )
+
+        if let error = Self.error {
             client?.urlProtocol(self, didFailWithError: error)
             return
         }
 
-        if let response = MockURLProtocol.response {
-            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        if let response = Self.response {
+            client?.urlProtocol(self,
+                didReceive: response,
+                cacheStoragePolicy: .notAllowed
+            )
         }
 
-        if let data = MockURLProtocol.mockData {
+        if let data = Self.mockData {
             client?.urlProtocol(self, didLoad: data)
         }
 

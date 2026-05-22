@@ -13,10 +13,11 @@ struct PostDetailView: View {
     @Environment(\.dismiss) private var dismiss
 
     // MARK: - iVars
-    private let viewModel: PostDetailViewModel
+    @StateObject private var viewModel: PostDetailViewModel
 
-    init(post: Post) {
-        self.viewModel = PostDetailViewModel(post: post)
+    // MARK: - Init (PRIMARY - for testing)
+    init(viewModel: PostDetailViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -45,6 +46,13 @@ struct PostDetailView: View {
         }
         .navigationBarHidden(true)
         .toolbarBackground(.hidden, for: .navigationBar)
+    }
+}
+
+// MARK: - Convenience Init (for app usage)
+extension PostDetailView {
+    init(post: Post) {
+        self.init(viewModel: PostDetailViewModel(post: post))
     }
 }
 

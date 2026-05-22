@@ -2,7 +2,25 @@ import XCTest
 import SwiftUI
 @testable import iOSPOCApp
 
+@MainActor
 final class PostListViewTests: XCTestCase {
+
+    private var viewModel: PostListViewModel!
+    private var mockService: MockAPIService!
+
+    override func setUp() {
+        super.setUp()
+        mockService = MockAPIService()
+        viewModel = PostListViewModel(
+            service: mockService
+        )
+    }
+
+    override func tearDown() {
+        viewModel = nil
+        mockService = nil
+        super.tearDown()
+    }
 
     // MARK: - Helper
     func makePost(
@@ -22,7 +40,7 @@ final class PostListViewTests: XCTestCase {
 
     // Basic execution (NO WARNING)
     func testListView_executesBody() {
-        let view = PostListView()
+        let view = PostListView(viewModel: viewModel)
 
         let host = UIHostingController(rootView: view)
         _ = host.view
@@ -37,7 +55,7 @@ final class PostListViewTests: XCTestCase {
             makePost(id: 2, likes: 150, tags: ["b"])
         ]
 
-        let view = PostListView()
+        let view = PostListView(viewModel: viewModel)
 
         let host = UIHostingController(rootView: view)
         _ = host.view
@@ -52,7 +70,7 @@ final class PostListViewTests: XCTestCase {
 
     // Empty state
     func testListView_emptyPosts_executesEmptyState() {
-        let view = PostListView()
+        let view = PostListView(viewModel: viewModel)
 
         let host = UIHostingController(rootView: view)
         _ = host.view
@@ -66,7 +84,7 @@ final class PostListViewTests: XCTestCase {
             makePost(id: $0, likes: $0 * 20, tags: ["tag\($0)"])
         }
 
-        let view = PostListView()
+        let view = PostListView(viewModel: viewModel)
 
         let host = UIHostingController(rootView: view)
         _ = host.view
@@ -86,7 +104,7 @@ final class PostListViewTests: XCTestCase {
             makePost(id: 3, likes: 50, tags: ["swift"])
         ]
 
-        let view = PostListView()
+        let view = PostListView(viewModel: viewModel)
 
         let host = UIHostingController(rootView: view)
         _ = host.view
@@ -99,7 +117,7 @@ final class PostListViewTests: XCTestCase {
     }
 
     func testSingleRowExecution() {
-        let view = PostListView()
+        let view = PostListView(viewModel: viewModel)
         let post = makePost(id: 99, likes: 120, tags: ["test"])
 
         let host = UIHostingController(rootView: view)

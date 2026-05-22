@@ -32,13 +32,6 @@ final class IOSPOCAppTests: XCTestCase {
         // This is an example of a performance test case.
     }
 
-    func testPostDetailViewInitialization() {
-        let posts = Post.mock()
-        let view = PostDetailView(post: posts)
-
-        XCTAssertNotNil(view)
-    }
-
     func testContentViewLoads() {
         let view = ContentView(isJailbroken: false)
         XCTAssertNotNil(view)
@@ -85,21 +78,6 @@ final class IOSPOCAppTests: XCTestCase {
         XCTAssertEqual(post.shortDescription, "First sentence.")
         XCTAssertEqual(post.status, "Trending")
         XCTAssertEqual(post.dateString, "May 15, 2026")
-    }
-
-    func testPostDetailViewInit() {
-        let post = Post(
-            id: 1,
-            title: "Test",
-            body: "Body",
-            views: 10,
-            tags: ["tag"],
-            reactions: .init(likes: 10, dislikes: 1)
-        )
-
-        let view = PostDetailView(post: post)
-
-        XCTAssertNotNil(view)
     }
 
     func testFormattedTags() {

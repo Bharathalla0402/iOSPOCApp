@@ -24,7 +24,11 @@ struct ContentView: View {
                         handleStartup()
                     }
             } else {
-                PostListView()
+                PostListView(
+                    viewModel: PostListViewModel(
+                        service: APIService()
+                    )
+                )
             }
         }
         .alert(Constants.Alert.jailbreakTitle, isPresented: $showJailbreakAlert) {

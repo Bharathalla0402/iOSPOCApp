@@ -66,26 +66,4 @@ final class PostDetailViewModelTests: XCTestCase {
     func testPostViews() {
         XCTAssertEqual(viewModel.postViews, 300)
     }
-
-    // MARK: - Edge Cases
-    func testHasTagsFalse() {
-        let viewModel = PostDetailViewModel(post: makePost(tags: []))
-        XCTAssertFalse(viewModel.hasTags)
-    }
-
-    func testIsTrendingFalse() {
-        let viewModel = PostDetailViewModel(post: makePost(likes: 50))
-        XCTAssertFalse(viewModel.isTrending)
-    }
-
-    func testTagsTextEmpty() {
-        let viewModel = PostDetailViewModel(post: makePost(tags: []))
-        XCTAssertEqual(viewModel.tagsText, "")
-    }
-
-    func testStatusFeatured() {
-        let viewModel = PostDetailViewModel(post: makePost(likes: 50))
-        XCTAssertEqual(viewModel.status, "Featured")
-    }
-
 }

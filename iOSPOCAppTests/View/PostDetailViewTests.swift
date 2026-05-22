@@ -33,9 +33,7 @@ final class PostDetailViewTests: XCTestCase {
     // Basic execution (covers body + most views)
     func testView_executesBody() {
         let post = makePost()
-        let view = PostDetailView(post: post)
-
-        _ = view.body
+        let view = makeHostingView(post: post)
 
         XCTAssertNotNil(view)
     }
@@ -43,31 +41,25 @@ final class PostDetailViewTests: XCTestCase {
     // Trending case (triggers headerBar logic)
     func testView_trendingCase_executesAllBranches() {
         let post = makePost(likes: 200)
-        let view = PostDetailView(post: post)
+        let view = makeHostingView(post: post)
 
-        _ = view.body
-
-        XCTAssertTrue(true)
+        XCTAssertNotNil(view)
     }
 
     // Featured case (alternate branch)
     func testView_featuredCase_executesAllBranches() {
         let post = makePost(likes: 50)
-        let view = PostDetailView(post: post)
+        let view = makeHostingView(post: post)
 
-        _ = view.body
-
-        XCTAssertTrue(true)
+        XCTAssertNotNil(view)
     }
 
     // Empty tags (covers tagSection edge case)
     func testView_emptyTags_executesTagSection() {
         let post = makePost(tags: [])
-        let view = PostDetailView(post: post)
+        let view = makeHostingView(post: post)
 
-        _ = view.body
-
-        XCTAssertTrue(true)
+        XCTAssertNotNil(view)
     }
 
     // Large content (forces deeper closures)
@@ -79,17 +71,8 @@ final class PostDetailViewTests: XCTestCase {
             dislikes: 10
         )
 
-        let view = PostDetailView(post: post)
+        let view = makeHostingView(post: post)
 
-        _ = view.body
-
-        XCTAssertTrue(true)
-    }
-
-    func testView_zeroLikesDislikes() {
-        let post = makePost(likes: 0, dislikes: 0)
-        let view = PostDetailView(post: post)
-
-        _ = view.body
+        XCTAssertNotNil(view)
     }
 }

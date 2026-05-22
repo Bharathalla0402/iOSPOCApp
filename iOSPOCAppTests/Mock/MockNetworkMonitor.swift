@@ -5,6 +5,7 @@
 //  Created by Alla Bharath on 15/05/26.
 //
 
+import Foundation
 @testable import iOSPOCApp
 
 final class MockNetworkMonitor: NetworkMonitorProtocol {

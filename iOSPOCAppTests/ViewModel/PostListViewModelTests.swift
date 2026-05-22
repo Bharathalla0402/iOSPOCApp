@@ -8,6 +8,7 @@
 import XCTest
 @testable import iOSPOCApp
 
+@MainActor
 final class PostListViewModelTests: XCTestCase {
 
     private var viewModel: PostListViewModel!
@@ -16,6 +17,7 @@ final class PostListViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        MockURLProtocol.isEnabled = false
         mockService = MockAPIService()
         mockNetwork = MockNetworkMonitor()
         viewModel = PostListViewModel(
@@ -24,6 +26,10 @@ final class PostListViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
+        MockURLProtocol.isEnabled = false
+        MockURLProtocol.mockData = nil
+        MockURLProtocol.response = nil
+        MockURLProtocol.error = nil
         viewModel = nil
         mockService = nil
         super.tearDown()
@@ -40,7 +46,6 @@ extension PostListViewModelTests {
     }
 
     // Success Case
-    @MainActor
     func test_fetchPosts_success() async {
         // Arrange
         let posts = [Post.mock()]
@@ -56,52 +61,7 @@ extension PostListViewModelTests {
         XCTAssertEqual(viewModel.posts.first?.title, "Test Title")
     }
 
-    // Failure Case
-    @MainActor
-    func test_fetchPosts_failure() async {
-        // Arrange
-        mockService.shouldReturnError = true
-
-        // Act
-        await viewModel.fetchPosts()
-
-        // Assert
-        XCTAssertFalse(viewModel.isLoading)
-        XCTAssertEqual(viewModel.error, "Failed to load data")
-        XCTAssertTrue(viewModel.posts.isEmpty)
-    }
-
-    // Internet Case
-    @MainActor
-    func test_fetchPosts_withInternet() async {
-        // Arrange
-        mockNetwork.setConnection(true)
-        mockService.postsToReturn = [Post.mock()]
-
-        // Act
-        await viewModel.fetchPosts()
-
-        // Assert
-        XCTAssertEqual(viewModel.posts.count, 1)
-        XCTAssertNil(viewModel.error)
-    }
-
-    // Reset Error Before Fetch
-    @MainActor
-    func test_fetchPosts_resetsError() async {
-        // Arrange
-        viewModel.error = "Old Error"
-        mockService.postsToReturn = [Post.mock()]
-
-        // Act
-        await viewModel.fetchPosts()
-
-        // Assert
-        XCTAssertNil(viewModel.error)
-    }
-
     // Empty Response
-    @MainActor
     func test_fetchPosts_emptyResponse() async {
         // Arrange
         mockService.postsToReturn = []

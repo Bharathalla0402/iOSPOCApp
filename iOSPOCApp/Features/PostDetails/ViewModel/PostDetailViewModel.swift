@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
 
-class PostDetailViewModel {
+final class PostDetailViewModel: ObservableObject {
 
     private let post: Post
 

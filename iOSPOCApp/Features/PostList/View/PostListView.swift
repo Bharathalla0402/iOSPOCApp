@@ -15,7 +15,7 @@ struct PostListView: View {
     // MARK: - StateObject
     @StateObject private var viewModel: PostListViewModel
 
-    init(viewModel: PostListViewModel = PostListViewModel()) {
+    init(viewModel: PostListViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 

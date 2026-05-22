@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+@MainActor
 class PostListViewModel: ObservableObject {
     // MARK: - Published Objects
     @Published var posts: [Post] = []
@@ -17,23 +18,23 @@ class PostListViewModel: ObservableObject {
 
     // MARK: - iVars
     private let service: APIServiceProtocol
-    private let networkMonitor: NetworkMonitor
 
     init(
-        service: APIServiceProtocol = APIService(),
-        networkMonitor: NetworkMonitor = NetworkMonitor()
+        service: APIServiceProtocol
     ) {
         self.service = service
-        self.networkMonitor = networkMonitor
     }
 
-    @MainActor
     func fetchPosts() async {
         isLoading = true
+        defer { isLoading = false }
         error = nil
+        showAlert = false
+
         do {
             posts = try await service.fetchPosts()
         } catch {
+            posts = []
             self.error = AppConstants.failedData
             self.showAlert = true
         }
